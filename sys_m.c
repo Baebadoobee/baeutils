@@ -1,5 +1,7 @@
 #include "baeutils.h"
 
+#define FLAG_COUNT (sizeof(flag)/sizeof(flag[0]))
+
 typedef struct {
   const char *sc;
   const char *flag;
@@ -26,44 +28,53 @@ main(int argc, char *argv[]) {
 
   if (!argv[1]) {
     help_msg();
+
+    return 0;
   }
 
   // Update
-  else if (strcmp(argv[1], flag[0].sc) == 0 || strcmp(argv[1], flag[0].flag) == 0) {
+  if (strcmp(argv[1], flag[0].sc) == 0 || strcmp(argv[1], flag[0].flag) == 0) {
     for (int i = 2; i < argc; ++i) {
-      if (strcmp(argv[i], "theme") == 0)
-        theme_att();
-      else if (strcmp(argv[i], "wallpaper") == 0)
-        wallpaper_att();
-      else if (strcmp(argv[i], "bar") == 0)
-        waybar_att();
-      else if (strcmp(argv[i], "palette") == 0)
-        c_palette();
+      if (strcmp(argv[i], "theme") == 0) theme_att();
+      else if (strcmp(argv[i], "wallpaper") == 0) wallpaper_att();
+      else if (strcmp(argv[i], "bar") == 0) waybar_att();
+      else if (strcmp(argv[i], "palette") == 0) c_palette();
     }
+
+    return 0;
   }
 
   // Install
-  else if (strcmp(argv[1], flag[1].sc) == 0 || strcmp(argv[1], flag[1].flag) == 0) {
+  if (strcmp(argv[1], flag[1].sc) == 0 || strcmp(argv[1], flag[1].flag) == 0) {
     for (int i = 2; i < argc; ++i) {
-      if (strcmp(argv[i], "dotfiles") == 0)
-        dot_install();
-      else if (strcmp(argv[i], "colorscheme") == 0)
-        colors_setup();
+      if (strcmp(argv[i], "dotfiles") == 0) dot_install();
+      else if (strcmp(argv[i], "colorscheme") == 0) colors_setup();
     }
+
+    return 0;
   }
 
   // Wallpaper
-  else if (strcmp(argv[1], flag[2].sc) == 0 || strcmp(argv[1], flag[2].flag) == 0) {
+  if (strcmp(argv[1], flag[2].sc) == 0 || strcmp(argv[1], flag[2].flag) == 0) {
     char *wallpaper = wallpaper_get();
-    printf("%s\n", wallpaper);
+    if (wallpaper) {
+        printf("%s\n", wallpaper);
+        free(wallpaper);
+    } else {
+        fprintf(stderr, "Failed to get wallpaper\n");
+    }
 
-    free(wallpaper);
+    return 0;
   }
 
   // Help
-  else if (strcmp(argv[1], flag[3].sc) == 0 || strcmp(argv[1], flag[3].flag) == 0) {
+  if (strcmp(argv[1], flag[3].sc) == 0 || strcmp(argv[1], flag[3].flag) == 0) {
     help_msg();
+
+    return 0;
   }
 
-  return 0;
+  help_msg();
+
+  return 1;
 }
