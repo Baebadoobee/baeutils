@@ -5,9 +5,11 @@
 #include <unistd.h>
 #include <errno.h>
 
-#define DOT_FOLDER "/home/bae/.dotfiles/hyprland/"
-#define CONFIG_FOLDER "/home/bae/.config/"
-#define HOME_FOLDER "/home/bae/"
+#define DOT_FOLDER "/home/bae/.dotfiles/hyprland/"  // Path to dotfiles home folder
+#define CONFIG_FOLDER "/home/bae/.config/"          // Path to user's config folder
+#define HOME_FOLDER "/home/bae/"                    // Path to home folder
+
+#define FILE_COUNT (sizeof(files)/sizeof(files[0])) // File list size
 
 typedef struct {
   const char *name;
@@ -36,7 +38,7 @@ void dot_install() {
     { "vimrc",                HOME_FOLDER ".vimrc",                 DOT_FOLDER ".vimrc"                   },
   };
 
-  for (int i = 0; i < 12; ++i)
+  for (int i = 0; i < FILE_COUNT; ++i)
     symlink(files[i].src, files[i].dest);
 }
 
@@ -51,14 +53,15 @@ void colors_setup() {
     { "colors-waybar.css",        CONFIG_FOLDER "wofi/colors-wofi.css",               HOME_FOLDER ".cache/wal/colors-waybar.css"     },
   };
 
-  for (int i = 0; i < 4; ++i)
+  for (int i = 0; i < FILE_COUNT; ++i)
     symlink(files[i].src, files[i].dest);
 }
 
 
 /*----  Utils Section  ----*/
 void copy_file(const char *dest, const char *src) {
-  FILE *ftr, *ftw; //file to...
+  FILE *ftr; // File to read
+  FILE *ftw; // File to write
   char buffer[33];
 
   ftr = fopen(src, "r");
@@ -105,12 +108,11 @@ char *wallpaper_get() {
 
 
 void c_palette() {
-  char pw_cmd[1024], *wallpaper, wal[1024];
-  strcpy(pw_cmd, "wal -ni ");
+  char pw_cmd[1024], *wallpaper;
+  strcpy(pw_cmd, "wal -e -ni ");
 
   wallpaper = wallpaper_get();
-  strcpy(wal, wallpaper);
-  strcat(pw_cmd, wal);
+  strcat(pw_cmd, wallpaper);
 
   system(pw_cmd);
 
