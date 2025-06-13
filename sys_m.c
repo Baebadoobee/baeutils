@@ -18,7 +18,7 @@ Arg flag[] = {
 
 void 
 help_msg() {
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < FLAG_COUNT; ++i)
       printf("%s\t%s\t%s\n", flag[i].sc, flag[i].flag, flag[i].desc);
     printf("\n");
 }
