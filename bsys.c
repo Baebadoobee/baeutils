@@ -1,22 +1,5 @@
 #include "baelib.h"
 
-#define FLAG_COUNT (sizeof(flag)/sizeof(flag[0]))
-
-typedef struct {
-  const char *sc;
-  const char *flag;
-  const char *desc;
-} Arg;
-
-Arg flag[] = {
- /* S_CUT    FLAG             DESCRIPTION */
-  { "-u",    "--update",      "Updates/reset some running applications. Can be called with: bar, theme, wallpaper or palette." },
-  { "-i",    "--install",     "The manager install flag can be used to install dotfiles or a colorscheme."                     },
-  { "-w",    "--wallpaper",   "Returns the current wallpaper."                                                                 },
-  { "-h",    "--help",        "\tPrints this help message."                                                                    },
-  { "-s",    "--set",         "\tCan be used to set some general configurations"                                               },
-};
-
 void help_msg();
 void update(int argc, char *argv[]);
 void install(int argc, char *argv[]);
