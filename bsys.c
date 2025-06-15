@@ -14,7 +14,7 @@ Arg flag[] = {
   { "-i",    "--install",     "The manager install flag can be used to install dotfiles or a colorscheme."                     },
   { "-w",    "--wallpaper",   "Returns the current wallpaper."                                                                 },
   { "-h",    "--help",        "\tPrints this help message."                                                                    },
-  { "-s",    "--set",         ""                                                                                               },
+  { "-s",    "--set",         "Can be used to set some general configurations"                                                 },
 };
 
 void help_msg();
