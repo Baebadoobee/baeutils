@@ -14,7 +14,7 @@ Arg flag[] = {
   { "-i",    "--install",     "The manager install flag can be used to install dotfiles or a colorscheme."                     },
   { "-w",    "--wallpaper",   "Returns the current wallpaper."                                                                 },
   { "-h",    "--help",        "\tPrints this help message."                                                                    },
-  { "-s",    "--set",         "Can be used to set some general configurations"                                                 },
+  { "-s",    "--set",         "\tCan be used to set some general configurations"                                               },
 };
 
 void help_msg();
@@ -67,18 +67,18 @@ main(int argc, char *argv[]) {
 
 void
 help_msg() {
-    for (int i = 0; i < FLAG_COUNT; ++i)
-      printf("%s\t%s\t%s\n", flag[i].sc, flag[i].flag, flag[i].desc);
-    printf("\n");
+  for (int i = 0; i < FLAG_COUNT; ++i)
+    printf("%s\t%s\t%s\n", flag[i].sc, flag[i].flag, flag[i].desc);
+  printf("\n");
 }
 
 void
 update(int argc, char *argv[]) {
   for (int i = 2; i < argc; ++i) {
     if (strcmp(argv[i], "theme") == 0) theme_att();
-    else if (strcmp(argv[i], "wallpaper") == 0) wallpaper_att();
     else if (strcmp(argv[i], "bar") == 0) waybar_att();
     else if (strcmp(argv[i], "palette") == 0) c_palette();
+    else if (strcmp(argv[i], "wallpaper") == 0) wallpaper_att();
   }
 }
 
@@ -106,11 +106,11 @@ set(int argc, char *argv[]) {
   for (int i = 2; i < argc; ++i) {
     int j = i + 1;
     if (strcmp(argv[i], "wallpaper") == 0) {
-        const char *src = "/home/bae/.config/waypaper/config.ini";
-        const char *temp = "/home/bae/.config/waypaper/config.ini.temp";
-        char dec[MAX_LINE_LENGTH] = "wallpaper = ";
-        
-        change_line(temp, src, 4, strcat(dec, strcat(argv[j], "\n")));
+      const char *src = "/home/bae/.config/waypaper/config.ini";
+      const char *temp = "/home/bae/.config/waypaper/config.ini.temp";
+      char dec[MAX_LINE_LENGTH] = "wallpaper = ";
+      
+      change_line(temp, src, 4, strcat(dec, strcat(argv[j], "\n")));
     }
   }
 }

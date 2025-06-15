@@ -8,7 +8,7 @@
 #define DOT_FOLDER "/home/bae/.dotfiles/hyprland/"                      // Path to dotfiles home folder
 #define CONFIG_FOLDER "/home/bae/.config/"                              // Path to user's config folder
 #define HOME_FOLDER "/home/bae/"                                        // Path to home folder
-#define WALLPAPER_FOLDER (DOT_FOLDER "/config/hypr/wallpaper")          // Path to wallpaper folder
+#define WALLPAPER_FOLDER DOT_FOLDER "/config/hypr/wallpaper"            // Path to wallpaper folder
 #define FILE_COUNT (sizeof(file_list)/sizeof(file_list[0]))             // File list size
 #define COMMAND_COUNT (sizeof(command_list)/sizeof(command_list[0]))    // Command list size
 
@@ -26,12 +26,12 @@ typedef struct {
   char *cmd;
 } Command;
 
-/* Remember to build the set functions */
-// typedef struct {
-//   char *wallpaper;
-//   int mode;
-// } Environment;
-
+/* baefs.h */
+FILE *read_file(const char *file);
+FILE *write_file(const char *file);
+FILE *append_file(const char *file);
+void change_line(const char *temp, const char *src, const int line_nbr, const char *text);
+void copy_file(const char *dest, const char *src);
 int symlink(const char *src, const char *dest);
 
 /*----  Install Section  ----*/
@@ -57,8 +57,6 @@ void dot_install() {
     symlink(file_list[i].src, file_list[i].dest);
 }
 
-// void config_install() {}
-
 void colors_setup() {
   Symlink_t file_list[] = {
    /* NAME                        DESTINATION                                         ORIGIN                                         */
@@ -75,40 +73,39 @@ void colors_setup() {
 
 /*----  Utils Section  ----*/
 char *wallpaper_get() {
-  FILE *waypaper_conf; //wppc
+  FILE *waypaper_conf = read_file("/home/bae/.config/waypaper/config.ini"); //wppc
   char buffer[MAX_LINE_LENGTH], line[30][MAX_LINE_LENGTH], *newline, *wallpaper;
+  wallpaper = NULL;
   int i = 0;
 
-  wallpaper = NULL;
-  waypaper_conf = read_file("/home/bae/.config/waypaper/config.ini");
-  while (fgets(buffer, sizeof(buffer), waypaper_conf) != NULL && i < 30) {
-    strcpy(line[i], buffer);
-    ++i;
+  if (waypaper_conf) {
+    while (fgets(buffer, sizeof(buffer), waypaper_conf) != NULL && i < 30) {
+      strcpy(line[i], buffer);
+      ++i;
+    }
+
+    wallpaper = malloc(strlen(line[3] + 12) + 1);
+    if (wallpaper) 
+      strcpy(wallpaper, line[3] + 12);
+
+    newline = strchr(wallpaper, '\n');
+    if (newline) 
+      *newline = '\0';
+
+    fclose(waypaper_conf);
+  } else {
+    free(wallpaper);
   }
-
-  wallpaper = malloc(strlen(line[3] + 12) + 1);
-  if (wallpaper) {
-    strcpy(wallpaper, line[3] + 12);
-  }
-
-  newline = strchr(wallpaper, '\n');
-  if (newline) *newline = '\0';
-
-  fclose(waypaper_conf);
 
   return wallpaper;
 }
-
-// void wallpaper_set(char *wallpaper) {
-//
-// }
 
 void c_palette() {
   char command[256], *wallpaper;
   wallpaper = wallpaper_get();
 
-  strcpy(command, "wal -e -ni ");
-  strcat(command, wallpaper);
+  strncpy(command, "wal -e -ni ", strlen(command + 12));
+  strncat(command, wallpaper, strlen(command) + strlen(wallpaper));
 
   system(command);
 
@@ -125,7 +122,6 @@ void waybar_reset() {
   for (int i = 0; i < COMMAND_COUNT; i++)
     system(command_list[i]);
 }
-
 
 /*----  Att. Section  ----*/
 void waybar_att() {
