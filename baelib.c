@@ -116,11 +116,12 @@ void theme_att()
 }
 
 /* Alsa Section */
-void volume_control(int per)
+void volume_control(const int per)
 {
   snd_mixer_t *mixer;
   snd_mixer_selem_id_t *sid;
   long min, max, vol;
+  int percentage_increment = per;
   
   snd_mixer_open(&mixer, 0);
   snd_mixer_attach(mixer, "default");
@@ -140,7 +141,7 @@ void volume_control(int per)
   snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
   snd_mixer_selem_get_playback_volume(elem, SND_MIXER_SCHN_FRONT_LEFT, &vol);
   
-  vol += (max * per / 100);
+  vol += (max * percentage_increment / 100);
   if (vol < min) vol = min;
   else if (vol > max) vol = max;
   
