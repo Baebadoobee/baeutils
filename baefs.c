@@ -1,4 +1,4 @@
-/* This header is meant for file system operation, it is suposed to be called by 'baelib.h' */
+/* This file is meant for file system operation, it is suposed to be called by 'baelib.h' */
 FILE *read_file(const char *file) {
   FILE *read_file = fopen(file, "r");
   if (!read_file) 

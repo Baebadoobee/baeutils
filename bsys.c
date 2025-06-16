@@ -1,19 +1,7 @@
 #include "baelib.h"
 
-void help_msg();
-void update(int argc, char *argv[]);
-void install(int argc, char *argv[]);
-void wallpaper();
-void set(int argc, char *argv[]);
-
-int
-main(int argc, char *argv[]) {
-
-  if (!argv[1]) {
-    help_msg();
-    return 0;
-  }
-
+int flag_parser(int argc, char *argv[]) 
+{
   // Update
   if (strcmp(argv[1], flag[0].sc) == 0 || strcmp(argv[1], flag[0].flag) == 0) {
     update(argc, argv);
@@ -44,69 +32,30 @@ main(int argc, char *argv[]) {
     return 0;
   }
 
-  help_msg();
   return 1;
 }
 
-void
-help_msg() {
-  for (int i = 0; i < FLAG_COUNT; ++i)
-    printf("%s\t%s\t%s\n", flag[i].sc, flag[i].flag, flag[i].desc);
-  printf("\n");
-}
-
-void
-update(int argc, char *argv[]) {
-  for (int i = 2; i < argc; ++i) {
-    if (strcmp(argv[i], "theme") == 0) theme_att();
-    else if (strcmp(argv[i], "bar") == 0) waybar_att();
-    else if (strcmp(argv[i], "palette") == 0) c_palette();
-    else if (strcmp(argv[i], "wallpaper") == 0) wallpaper_att();
+int flag_error(int flag) 
+{
+  if (flag != 0) {
+    fprintf(stderr, "Argument not recognized. Please try one of the standard flags.\n");
+    return 1;
   }
+
+  return 0;
 }
 
-void
-install(int argc, char *argv[]) {
-  for (int i = 2; i < argc; ++i) {
-    if (strcmp(argv[i], "dotfiles") == 0) dot_install();
-    else if (strcmp(argv[i], "colorscheme") == 0) colors_setup();
-  }
-}
-
-void
-wallpaper() {
-  char *wallpaper = wallpaper_get();
-  if (wallpaper) {
-    printf("%s\n", wallpaper);
-    free(wallpaper);
+int main(int argc, char *argv[]) 
+{
+  if (!argv[1]) {
+    help_msg();
+    return 0;
   } else {
-    fprintf(stderr, "Failed to get wallpaper\n");
-  }
-}
-
-void
-set(int argc, char *argv[]) {
-  for (int i = 2; i < argc; ++i) {
-    int j = i + 1;
-    if (strcmp(argv[i], "wallpaper") == 0) {
-      if (!argv[j]) {
-        fprintf(stderr, "No value to set\n");
-        return;
-      }
-
-      const char *src = "/home/bae/.config/waypaper/config.ini";
-      const char *temp = "/home/bae/.config/waypaper/config.ini.temp";
-      char dec[MAX_LINE_LENGTH] = "wallpaper = ";
-      change_line(temp, src, 4, strcat(dec, strcat(argv[j], "\n")));
+    int flag_call = flag_parser(argc, argv);
+    if (flag_error(flag_call) != 0) {
+      help_msg();
     }
-    else if (strcmp(argv[i], "volume") == 0) {
-      if (!argv[j]) {
-        fprintf(stderr, "No value to set\n");
-        return;
-      }
 
-      int new_volume = atoi(argv[j]);
-      volume_control(new_volume);
-    }
+    return flag_call;
   }
 }

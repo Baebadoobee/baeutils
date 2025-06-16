@@ -42,6 +42,7 @@ Arg flag[] = {
 
 #include "baefs.c"
 #include "baelib.c"
+#include "baeflag.c"
 
 FILE *read_file(const char *file); /* baefs.c */
 FILE *write_file(const char *file);
@@ -58,4 +59,10 @@ void waybar_att();
 void wallpaper_reset();
 void wallpaper_att();
 void theme_att();
-void volume_control(const int percent_increment);
+void alsa_ctl_list(); /* im working in some alsa functions rn */
+void alsa_volume_control(const int percent_increment);
+void help_msg(); /* cliflags.c */
+void update(int argc, char *argv[]);
+void install(int argc, char *argv[]);
+void wallpaper();
+void set(int argc, char *argv[]);

@@ -116,14 +116,29 @@ void theme_att()
 }
 
 /* Alsa Section */
-void volume_control(const int percent_increment)
+void alsa_ctl_list()
+{
+  char **hints;
+
+  snd_device_name_hint(-1, "ctl", (void***)&hints);
+
+  for (int i = 0; i < sizeof(hints) - 3; ++i) {
+    printf("- %s\n", snd_device_name_get_hint((void**)hints[i], "NAME"));
+    free(snd_device_name_get_hint((void**)hints[i], "NAME"));
+  }
+
+  snd_device_name_free_hint((void**)hints);
+  
+}
+
+void alsa_volume_control(const int percent_increment)
 {
   snd_mixer_t *mixer;
   snd_mixer_selem_id_t *sid;
   long min_volume, max_volume, volume;
   int percent = percent_increment;
 
-  if (increment == 0) {
+  if (percent_increment == 0) {
     int percent = 1;
   }
   
@@ -147,8 +162,11 @@ void volume_control(const int percent_increment)
   
   volume += ((max_volume - min_volume) * percent / 100);
   if (volume < min_volume) volume = min_volume;
-  else if (volume > max) volume = max_volume;
+  else if (volume > max_volume) volume = max_volume;
   
   snd_mixer_selem_set_playback_volume_all(elem, volume);
+
+  free(sid);
+
   snd_mixer_close(mixer);
 }
