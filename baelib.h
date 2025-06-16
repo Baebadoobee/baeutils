@@ -37,7 +37,7 @@ Arg flag[] = {
   { "-i",    "--install",     "The manager install flag can be used to install dotfiles or a colorscheme."                     },
   { "-w",    "--wallpaper",   "Returns the current wallpaper."                                                                 },
   { "-h",    "--help",        "\tPrints this help message."                                                                    },
-  { "-s",    "--set",         "\tCan be used to set some general configurations."                                              },
+  { "-s",    "--set",         "\tCan be used to set some general values like volume."                                          },
 };
 
 #include "baefs.c"

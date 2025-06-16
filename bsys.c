@@ -89,12 +89,22 @@ set(int argc, char *argv[]) {
   for (int i = 2; i < argc; ++i) {
     int j = i + 1;
     if (strcmp(argv[i], "wallpaper") == 0) {
+      if (!argv[j]) {
+        fprintf(stderr, "No value to set\n");
+        return;
+      }
+
       const char *src = "/home/bae/.config/waypaper/config.ini";
       const char *temp = "/home/bae/.config/waypaper/config.ini.temp";
       char dec[MAX_LINE_LENGTH] = "wallpaper = ";
       change_line(temp, src, 4, strcat(dec, strcat(argv[j], "\n")));
     }
     else if (strcmp(argv[i], "volume") == 0) {
+      if (!argv[j]) {
+        fprintf(stderr, "No value to set\n");
+        return;
+      }
+
       int new_volume = atoi(argv[j]);
       volume_control(new_volume);
     }
