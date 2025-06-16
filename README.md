@@ -5,8 +5,26 @@
 <br />
 
 <!-- ABOUT THE PROJECT -->
-# About the project
+## About the project
+
+This project aims, mainly, on making a multi Window Manager portable library to implement a single solution for the different GUI that I use from time to time in my system. As a secondary objective, with time, I want to make it more portable for any user that come across the same problems that I did/do.
+
+### List of Typedefs
+
 TODO
+
+### Typedef Description
+
+TODO
+
+### List of Functions
+
+TODO
+
+### Function Description
+
+TODO
+
 </br>
 
 ##
