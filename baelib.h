@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
+#include <alsa/asoundlib.h>
 
 #define HOME_FOLDER "/home/bae"                                         // Path to home folder
 #define DOT_FOLDER HOME_FOLDER "/.dotfiles/hyprland/"                   // Path to dotfiles home folder
@@ -36,22 +37,19 @@ Arg flag[] = {
   { "-i",    "--install",     "The manager install flag can be used to install dotfiles or a colorscheme."                     },
   { "-w",    "--wallpaper",   "Returns the current wallpaper."                                                                 },
   { "-h",    "--help",        "\tPrints this help message."                                                                    },
-  { "-s",    "--set",         "\tCan be used to set some general configurations"                                               },
+  { "-s",    "--set",         "\tCan be used to set some general configurations."                                              },
 };
 
 #include "baefs.c"
 #include "baelib.c"
 
-/* baefs.c */
-FILE *read_file(const char *file);
+FILE *read_file(const char *file); /* baefs.c */
 FILE *write_file(const char *file);
 FILE *append_file(const char *file);
 void change_line(const char *temp, const char *src, const int line_nbr, const char *text);
 void copy_file(const char *dest, const char *src);
 int symlink(const char *src, const char *dest);
-
-/* baelib.c */
-void dot_install();
+void dot_install(); /* baelib.c */
 void colors_setup();
 char *wallpaper_get();
 void c_palette();
@@ -60,3 +58,4 @@ void waybar_att();
 void wallpaper_reset();
 void wallpaper_att();
 void theme_att();
+void volume_control(int per);

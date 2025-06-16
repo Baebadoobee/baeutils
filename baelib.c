@@ -1,5 +1,6 @@
 /* This file is meant for to be called by 'baelib.h' */
-void dot_install() {
+void dot_install()
+{
   Symlink file_list[] = {
    /* NAME                    DESTINATION                           ORIGIN                                */
     { "nwg-dock-hyprland",    CONFIG_FOLDER "nwg-dock-hyprland",    DOT_FOLDER "config/nwg-dock-hyprland" },
@@ -21,7 +22,8 @@ void dot_install() {
     symlink(file_list[i].src, file_list[i].dest);
 }
 
-void colors_setup() {
+void colors_setup()
+{
   Symlink file_list[] = {
    /* NAME                        DESTINATION                                         ORIGIN                                         */
     { "colors-alacritty.toml",    CONFIG_FOLDER "alacritty/colors-alacritty.toml",    HOME_FOLDER ".cache/wal/colors-alacritty.toml" },
@@ -35,8 +37,9 @@ void colors_setup() {
     symlink(file_list[i].src, file_list[i].dest);
 }
 
-/*----  Utils Section  ----*/
-char *wallpaper_get() {
+/* Utils Section */
+char *wallpaper_get()
+{
   FILE *waypaper_conf = read_file("/home/bae/.config/waypaper/config.ini"); //wppc
   char buffer[MAX_LINE_LENGTH], line[30][MAX_LINE_LENGTH], *newline, *wallpaper;
   wallpaper = NULL;
@@ -64,7 +67,8 @@ char *wallpaper_get() {
   return wallpaper;
 }
 
-void c_palette() {
+void c_palette()
+{
   char command[256], *wallpaper;
   wallpaper = wallpaper_get();
 
@@ -87,22 +91,59 @@ void waybar_reset() {
     system(command_list[i]);
 }
 
-/*----  Att. Section  ----*/
-void waybar_att() {
+/* Att. Section*/
+void waybar_att()
+{
   c_palette();
   waybar_reset();
 }
 
-void wallpaper_reset() {
+void wallpaper_reset()
+{
   system("waypaper --random");
 }
 
-void wallpaper_att() {
+void wallpaper_att()
+{
   wallpaper_reset();
   c_palette();
 }
 
-void theme_att() {
+void theme_att()
+{
   wallpaper_att();
   waybar_att();
+}
+
+/* Alsa Section */
+void volume_control(int per)
+{
+  snd_mixer_t *mixer;
+  snd_mixer_selem_id_t *sid;
+  long min, max, vol;
+  
+  snd_mixer_open(&mixer, 0);
+  snd_mixer_attach(mixer, "default");
+  snd_mixer_selem_register(mixer, NULL, NULL);
+  snd_mixer_load(mixer);
+  
+  snd_mixer_selem_id_malloc(&sid);
+  snd_mixer_selem_id_set_index(sid, 0);
+  snd_mixer_selem_id_set_name(sid, "Master");
+  
+  snd_mixer_elem_t *elem = snd_mixer_find_selem(mixer, sid);
+  if (!elem) {
+    snd_mixer_selem_id_set_name(sid, "PCM");
+    elem = snd_mixer_find_selem(mixer, sid);
+  }
+
+  snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
+  snd_mixer_selem_get_playback_volume(elem, SND_MIXER_SCHN_FRONT_LEFT, &vol);
+  
+  vol += (max * per / 100);
+  if (vol < min) vol = min;
+  else if (vol > max) vol = max;
+  
+  snd_mixer_selem_set_playback_volume_all(elem, vol);
+  snd_mixer_close(mixer);
 }

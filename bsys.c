@@ -92,8 +92,11 @@ set(int argc, char *argv[]) {
       const char *src = "/home/bae/.config/waypaper/config.ini";
       const char *temp = "/home/bae/.config/waypaper/config.ini.temp";
       char dec[MAX_LINE_LENGTH] = "wallpaper = ";
-      
       change_line(temp, src, 4, strcat(dec, strcat(argv[j], "\n")));
+    }
+    else if (strcmp(argv[i], "volume") == 0) {
+      int new_volume = atoi(argv[j]);
+      volume_control(new_volume);
     }
   }
 }

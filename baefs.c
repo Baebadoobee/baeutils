@@ -24,8 +24,8 @@ FILE *append_file(const char *file) {
 }
 
 void change_line(const char *temp, const char *src, const int line_nbr, const char *text) {
-  FILE *ftr = read_file(src); // File to read
-  FILE *ftw = write_file(temp); // File to write
+  FILE *ftr = read_file(src);    // File to read
+  FILE *ftw = write_file(temp);  // File to write
   char buffer[MAX_LINE_LENGTH];
   int start_line_nbr = 1;
 
@@ -51,8 +51,8 @@ void change_line(const char *temp, const char *src, const int line_nbr, const ch
 }
 
 void copy_file(const char *dest, const char *src) {
-  FILE *ftr = read_file(src); // File to read
-  FILE *ftw = write_file(dest); // File to write
+  FILE *ftr = read_file(src);    // File to read
+  FILE *ftw = write_file(dest);  // File to write
   char buffer[MAX_LINE_LENGTH];
 
   if (ftr && ftw) {
