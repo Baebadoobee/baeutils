@@ -58,4 +58,4 @@ void waybar_att();
 void wallpaper_reset();
 void wallpaper_att();
 void theme_att();
-void volume_control(const int per);
+void volume_control(const int percent_increment);
